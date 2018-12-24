@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:10.4-alpine'
+    volumes:
+      - '/var/lib/postgresql/data'
+    restart: always
+  app:
+    build:
+      context: ..
+      dockerfile: ./build/django_staging.Dockerfile
+      args:
+        - DJANGO_ENV=staging
+    image: 'example/django_api'
+    env_file: 'envs/staging.env'
+    depends_on:
+      - db
+    restart: always
